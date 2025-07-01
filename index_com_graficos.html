@@ -520,8 +520,473 @@
             </div>
         </main>
 
-        <!-- Other sections (entries, exits, suppliers, reports, users, settings) remain the same -->
-        <!-- ... -->
+        <!-- Entries Section -->
+        <main id="entries" class="section p-6 hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800">Entradas de Produtos</h3>
+                    <p class="text-gray-600">Registre e consulte as entradas de produtos no estoque</p>
+                </div>
+                <button id="addEntryBtn"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Nova Entrada
+                </button>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="bg-white rounded-xl shadow-sm p-3 mb-3">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <input type="text" id="searchEntries" placeholder="Buscar entradas..."
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <input type="date" id="dateFilter"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <select id="supplierFilter"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Todos os fornecedores</option>
+                            <option value="1">Fornecedor A</option>
+                            <option value="2">Fornecedor B</option>
+                            <option value="3">Fornecedor C</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Entries Table -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Data</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Nº Documento</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Fornecedor</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Produtos</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Valor Total</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="entriesTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Entries will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Exits Section -->
+        <main id="exits" class="section p-6 hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800">Saídas de Produtos</h3>
+                    <p class="text-gray-600">Registre e consulte as saídas de produtos do estoque</p>
+                </div>
+                <button id="addExitBtn"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Nova Saída
+                </button>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="bg-white rounded-xl shadow-sm p-3 mb-3">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <input type="text" id="searchExits" placeholder="Buscar saídas..."
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <input type="date" id="exitDateFilter"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <select id="destinationFilter"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Todos os destinos</option>
+                            <option value="venda">Venda</option>
+                            <option value="transferencia">Transferência</option>
+                            <option value="devolucao">Devolução</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exits Table -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Data</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Nº Documento</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Destino</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Produtos</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Valor Total</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="exitsTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Exits will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Suppliers Section -->
+        <main id="suppliers" class="section p-6 hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800">Fornecedores</h3>
+                    <p class="text-gray-600">Gerencie os fornecedores do seu estoque</p>
+                </div>
+                <button id="addSupplierBtn"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Novo Fornecedor
+                </button>
+            </div>
+
+            <!-- Suppliers Table -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Nome</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    CNPJ</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Contato</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Email</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="suppliersTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Suppliers will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Reports Section -->
+        <main id="reports" class="section p-6 hidden">
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold text-gray-800">Relatórios</h3>
+                <p class="text-gray-600">Gere relatórios personalizados do seu estoque</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-boxes text-blue-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-800">Relatório de Estoque</h4>
+                            <p class="text-sm text-gray-600">Lista completa de produtos</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button
+                            class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-arrow-down text-green-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-800">Relatório de Entradas</h4>
+                            <p class="text-sm text-gray-600">Entradas por período</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button
+                            class="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                            Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-arrow-up text-red-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-800">Relatório de Saídas</h4>
+                            <p class="text-sm text-gray-600">Saídas por período</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button
+                            class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                            Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-800">Relatório de Estoque Crítico</h4>
+                            <p class="text-sm text-gray-600">Produtos abaixo do mínimo</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button
+                            class="w-full px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors">
+                            Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-calendar-alt text-purple-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-800">Relatório de Validade</h4>
+                            <p class="text-sm text-gray-600">Produtos próximos ao vencimento</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button
+                            class="w-full px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                            Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-chart-line text-indigo-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-800">Relatório Financeiro</h4>
+                            <p class="text-sm text-gray-600">Movimentação financeira</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button
+                            class="w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                            Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Users Section -->
+        <main id="users" class="section p-6 hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800">Usuários</h3>
+                    <p class="text-gray-600">Gerencie os usuários do sistema</p>
+                </div>
+                <button id="addUserBtn"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Novo Usuário
+                </button>
+            </div>
+
+            <!-- Users Table -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Nome</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Email</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Perfil</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Status</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Users will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Settings Section -->
+        <main id="settings" class="section p-6 hidden">
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold text-gray-800">Configurações</h3>
+                <p class="text-gray-600">Personalize as configurações do sistema</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-md font-medium text-gray-800 mb-4">Configurações Gerais</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nome da Empresa</label>
+                                <input type="text" value="EstoqueMax"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Moeda</label>
+                                <select
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option>Real (R$)</option>
+                                    <option>Dólar (US$)</option>
+                                    <option>Euro (€)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Notificação de Estoque
+                                    Crítico</label>
+                                <select
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option>Ativado</option>
+                                    <option>Desativado</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Backup Automático</label>
+                                <select
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option>Diário</option>
+                                    <option>Semanal</option>
+                                    <option>Mensal</option>
+                                    <option>Desativado</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-6">
+                        <h4 class="text-md font-medium text-gray-800 mb-4">Segurança</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tempo de Sessão
+                                    (minutos)</label>
+                                <input type="number" value="30"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tentativas de Login</label>
+                                <input type="number" value="3"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Complexidade de
+                                    Senha</label>
+                                <select
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option>Mínimo 6 caracteres</option>
+                                    <option>Mínimo 8 caracteres com números</option>
+                                    <option>Mínimo 8 caracteres com números e símbolos</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Autenticação em Dois
+                                    Fatores</label>
+                                <select
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option>Opcional</option>
+                                    <option>Obrigatório para administradores</option>
+                                    <option>Obrigatório para todos</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-6">
+                        <h4 class="text-md font-medium text-gray-800 mb-4">Personalização</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tema</label>
+                                <select
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option>Claro</option>
+                                    <option>Escuro</option>
+                                    <option>Sistema</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Densidade da
+                                    Interface</label>
+                                <select
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option>Confortável</option>
+                                    <option>Compacto</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end pt-6">
+                        <button
+                            class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors mr-3">
+                            Cancelar
+                        </button>
+                        <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Salvar Configurações
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
     <!-- Product Modal -->
@@ -608,6 +1073,275 @@
                         <button type="submit"
                             class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                             Salvar Produto
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Entry Modal -->
+    <div id="entryModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-800">Nova Entrada</h3>
+                    <button id="closeEntryModal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <form id="entryForm" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Data</label>
+                            <input type="date" name="entryDate" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nº Documento</label>
+                            <input type="text" name="documentNumber" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Fornecedor</label>
+                            <select name="supplier" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">Selecione um fornecedor</option>
+                                <option value="1">Fornecedor A</option>
+                                <option value="2">Fornecedor B</option>
+                                <option value="3">Fornecedor C</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Observações</label>
+                        <textarea name="notes" rows="2"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-4">
+                        <h4 class="text-md font-medium text-gray-800 mb-4">Itens da Entrada</h4>
+
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Produto</label>
+                                    <select name="product" required
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        <option value="">Selecione um produto</option>
+                                        <option value="1">Produto A</option>
+                                        <option value="2">Produto B</option>
+                                        <option value="3">Produto C</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Quantidade</label>
+                                    <input type="number" name="quantity" required min="1"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Preço Unitário</label>
+                                    <input type="number" name="unitPrice" required min="0" step="0.01"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div class="flex items-end">
+                                    <button type="button" id="addEntryItem"
+                                        class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                        Adicionar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Produto</th>
+                                            <th
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Quantidade</th>
+                                            <th
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Preço Unitário</th>
+                                            <th
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Total</th>
+                                            <th
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="entryItemsTable" class="bg-white divide-y divide-gray-200">
+                                        <!-- Entry items will be added here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Total de Itens: <span id="totalItems"
+                                        class="font-bold">0</span></p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Valor Total: <span id="totalValue"
+                                        class="font-bold">R$ 0,00</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" id="cancelEntry"
+                            class="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="submit"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Registrar Entrada
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exit Modal -->
+    <div id="exitModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-800">Nova Saída</h3>
+                    <button id="closeExitModal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <form id="exitForm" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Data</label>
+                            <input type="date" name="exitDate" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nº Documento</label>
+                            <input type="text" name="documentNumber" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Destino</label>
+                            <select name="destination" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">Selecione um destino</option>
+                                <option value="venda">Venda</option>
+                                <option value="transferencia">Transferência</option>
+                                <option value="devolucao">Devolução</option>
+                                <option value="perda">Perda</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Observações</label>
+                        <textarea name="notes" rows="2"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-4">
+                        <h4 class="text-md font-medium text-gray-800 mb-4">Itens da Saída</h4>
+
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Produto</label>
+                                    <select name="product" required
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        <option value="">Selecione um produto</option>
+                                        <option value="1">Produto A</option>
+                                        <option value="2">Produto B</option>
+                                        <option value="3">Produto C</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Quantidade</label>
+                                    <input type="number" name="quantity" required min="1"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Preço Unitário</label>
+                                    <input type="number" name="unitPrice" required min="0" step="0.01"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+                                <div class="flex items-end">
+                                    <button type="button" id="addExitItem"
+                                        class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                        Adicionar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Produto</th>
+                                            <th
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Quantidade</th>
+                                            <th
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Preço Unitário</th>
+                                            <th
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Total</th>
+                                            <th
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="exitItemsTable" class="bg-white divide-y divide-gray-200">
+                                        <!-- Exit items will be added here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Total de Itens: <span id="totalExitItems"
+                                        class="font-bold">0</span></p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Valor Total: <span id="totalExitValue"
+                                        class="font-bold">R$ 0,00</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" id="cancelExit"
+                            class="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="submit"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Registrar Saída
                         </button>
                     </div>
                 </form>
@@ -711,7 +1445,30 @@
                     pageTitle.textContent = 'Produtos';
                     pageSubtitle.textContent = 'Gerencie seus produtos';
                     break;
-                // Add cases for other sections
+                case 'entries':
+                    pageTitle.textContent = 'Entradas';
+                    pageSubtitle.textContent = 'Registre e consulte as entradas';
+                    break;
+                case 'exits':
+                    pageTitle.textContent = 'Saídas';
+                    pageSubtitle.textContent = 'Registre e consulte as saídas';
+                    break;
+                case 'suppliers':
+                    pageTitle.textContent = 'Fornecedores';
+                    pageSubtitle.textContent = 'Gerencie seus fornecedores';
+                    break;
+                case 'reports':
+                    pageTitle.textContent = 'Relatórios';
+                    pageSubtitle.textContent = 'Gere relatórios do estoque';
+                    break;
+                case 'users':
+                    pageTitle.textContent = 'Usuários';
+                    pageSubtitle.textContent = 'Gerencie os usuários do sistema';
+                    break;
+                case 'settings':
+                    pageTitle.textContent = 'Configurações';
+                    pageSubtitle.textContent = 'Personalize o sistema';
+                    break;
             }
         }
 
@@ -750,18 +1507,236 @@
             productModal.classList.add('hidden');
         });
 
+        // Entry modal
+        const addEntryBtn = document.getElementById('addEntryBtn');
+        const entryModal = document.getElementById('entryModal');
+        const closeEntryModal = document.getElementById('closeEntryModal');
+        const cancelEntry = document.getElementById('cancelEntry');
+        const addEntryItem = document.getElementById('addEntryItem');
+        const entryItemsTable = document.getElementById('entryItemsTable');
+        const totalItems = document.getElementById('totalItems');
+        const totalValue = document.getElementById('totalValue');
+
+        addEntryBtn.addEventListener('click', () => {
+            entryModal.classList.remove('hidden');
+        });
+
+        closeEntryModal.addEventListener('click', () => {
+            entryModal.classList.add('hidden');
+        });
+
+        cancelEntry.addEventListener('click', () => {
+            entryModal.classList.add('hidden');
+        });
+
+        // Exit modal
+        const addExitBtn = document.getElementById('addExitBtn');
+        const exitModal = document.getElementById('exitModal');
+        const closeExitModal = document.getElementById('closeExitModal');
+        const cancelExit = document.getElementById('cancelExit');
+        const addExitItem = document.getElementById('addExitItem');
+        const exitItemsTable = document.getElementById('exitItemsTable');
+        const totalExitItems = document.getElementById('totalExitItems');
+        const totalExitValue = document.getElementById('totalExitValue');
+
+        addExitBtn.addEventListener('click', () => {
+            exitModal.classList.remove('hidden');
+        });
+
+        closeExitModal.addEventListener('click', () => {
+            exitModal.classList.add('hidden');
+        });
+
+        cancelExit.addEventListener('click', () => {
+            exitModal.classList.add('hidden');
+        });
+
+        // Function to add entry item
+        function addEntryItemToTable() {
+            const productSelect = document.querySelector('#entryForm select[name="product"]');
+            const quantityInput = document.querySelector('#entryForm input[name="quantity"]');
+            const unitPriceInput = document.querySelector('#entryForm input[name="unitPrice"]');
+
+            if (!productSelect.value || !quantityInput.value || !unitPriceInput.value) {
+                alert('Preencha todos os campos do item');
+                return;
+            }
+
+            const productName = productSelect.options[productSelect.selectedIndex].text;
+            const quantity = parseFloat(quantityInput.value);
+            const unitPrice = parseFloat(unitPriceInput.value);
+            const total = quantity * unitPrice;
+
+            const row = document.createElement('tr');
+            row.className = 'entry-item';
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap">${productName}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${quantity}</td>
+                <td class="px-6 py-4 whitespace-nowrap">R$ ${unitPrice.toFixed(2)}</td>
+                <td class="px-6 py-4 whitespace-nowrap">R$ ${total.toFixed(2)}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <button class="text-red-600 hover:text-red-800 remove-entry-item">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+
+            entryItemsTable.appendChild(row);
+
+            // Clear inputs
+            productSelect.value = '';
+            quantityInput.value = '';
+            unitPriceInput.value = '';
+
+            // Update totals
+            updateEntryTotals();
+        }
+
+        // Function to update entry totals
+        function updateEntryTotals() {
+            const items = document.querySelectorAll('.entry-item');
+            let totalQuantity = 0;
+            let totalAmount = 0;
+
+            items.forEach(item => {
+                const quantity = parseFloat(item.querySelector('td:nth-child(2)').textContent);
+                const amount = parseFloat(item.querySelector('td:nth-child(4)').textContent.replace('R$ ', ''));
+
+                totalQuantity += quantity;
+                totalAmount += amount;
+            });
+
+            totalItems.textContent = totalQuantity;
+            totalValue.textContent = `R$ ${totalAmount.toFixed(2)}`;
+        }
+
+        // Function to add exit item
+        function addExitItemToTable() {
+            const productSelect = document.querySelector('#exitForm select[name="product"]');
+            const quantityInput = document.querySelector('#exitForm input[name="quantity"]');
+            const unitPriceInput = document.querySelector('#exitForm input[name="unitPrice"]');
+
+            if (!productSelect.value || !quantityInput.value || !unitPriceInput.value) {
+                alert('Preencha todos os campos do item');
+                return;
+            }
+
+            const productName = productSelect.options[productSelect.selectedIndex].text;
+            const quantity = parseFloat(quantityInput.value);
+            const unitPrice = parseFloat(unitPriceInput.value);
+            const total = quantity * unitPrice;
+
+            const row = document.createElement('tr');
+            row.className = 'exit-item';
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap">${productName}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${quantity}</td>
+                <td class="px-6 py-4 whitespace-nowrap">R$ ${unitPrice.toFixed(2)}</td>
+                <td class="px-6 py-4 whitespace-nowrap">R$ ${total.toFixed(2)}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <button class="text-red-600 hover:text-red-800 remove-exit-item">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+
+            exitItemsTable.appendChild(row);
+
+            // Clear inputs
+            productSelect.value = '';
+            quantityInput.value = '';
+            unitPriceInput.value = '';
+
+            // Update totals
+            updateExitTotals();
+        }
+
+        // Function to update exit totals
+        function updateExitTotals() {
+            const items = document.querySelectorAll('.exit-item');
+            let totalQuantity = 0;
+            let totalAmount = 0;
+
+            items.forEach(item => {
+                const quantity = parseFloat(item.querySelector('td:nth-child(2)').textContent);
+                const amount = parseFloat(item.querySelector('td:nth-child(4)').textContent.replace('R$ ', ''));
+
+                totalQuantity += quantity;
+                totalAmount += amount;
+            });
+
+            totalExitItems.textContent = totalQuantity;
+            totalExitValue.textContent = `R$ ${totalAmount.toFixed(2)}`;
+        }
+
+        // Event listeners for entry items
+        addEntryItem.addEventListener('click', addEntryItemToTable);
+
+        entryItemsTable.addEventListener('click', (e) => {
+            if (e.target.closest('.remove-entry-item')) {
+                e.target.closest('tr').remove();
+                updateEntryTotals();
+            }
+        });
+
+        // Event listeners for exit items
+        addExitItem.addEventListener('click', addExitItemToTable);
+
+        exitItemsTable.addEventListener('click', (e) => {
+            if (e.target.closest('.remove-exit-item')) {
+                e.target.closest('tr').remove();
+                updateExitTotals();
+            }
+        });
+
         // Close modal when clicking outside
         window.addEventListener('click', (e) => {
             if (e.target === productModal) {
                 productModal.classList.add('hidden');
             }
+            if (e.target === entryModal) {
+                entryModal.classList.add('hidden');
+            }
+            if (e.target === exitModal) {
+                exitModal.classList.add('hidden');
+            }
         });
 
         // Close modal with ESC key
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !productModal.classList.contains('hidden')) {
-                productModal.classList.add('hidden');
+            if (e.key === 'Escape') {
+                if (!productModal.classList.contains('hidden')) {
+                    productModal.classList.add('hidden');
+                }
+                if (!entryModal.classList.contains('hidden')) {
+                    entryModal.classList.add('hidden');
+                }
+                if (!exitModal.classList.contains('hidden')) {
+                    exitModal.classList.add('hidden');
+                }
             }
+        });
+
+        // Form submissions
+        document.getElementById('productForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Produto cadastrado com sucesso!');
+            productModal.classList.add('hidden');
+            // Here you would typically send the data to the server
+        });
+
+        document.getElementById('entryForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Entrada registrada com sucesso!');
+            entryModal.classList.add('hidden');
+            // Here you would typically send the data to the server
+        });
+
+        document.getElementById('exitForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Saída registrada com sucesso!');
+            exitModal.classList.add('hidden');
+            // Here you would typically send the data to the server
         });
 
         // Initialize dashboard
