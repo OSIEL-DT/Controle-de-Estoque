@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Controle de Estoque – Dashboard</title>
+    <script src="https://cdn.tailwindcss.com/"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .dashboard-header {
+            background-color: #ffffff;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar {
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-link {
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-link:hover {
+            background-color: #f2f2f2;
+        }
+
+        .section-content {
+            transition: all 0.3s ease;
+        }
+
+        .section-content.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-content.fade-out {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .sidebar-active {
+            transform: translateX(0);
+        }
+
+        .sidebar-inactive {
+            transform: translateX(-100%);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            margin-top: 0.5rem;
+            width: 200px;
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+        }
+
+        .user-dropdown.show {
+            display: block;
+        }
+
+        .user-dropdown-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .user-dropdown-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .toggle-sidebar-btn {
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-collapsed {
+            width: 64px;
+            overflow: hidden;
+        }
+
+        .sidebar-collapsed .nav-link span,
+        .sidebar-collapsed .menu-title {
+            display: none;
+        }
+
+        .sidebar-collapsed .flex.items-center.justify-center h1 {
+            display: none;
+        }
+
+        .sidebar-collapsed .nav-link {
+            justify-content: center;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .sidebar-collapsed .px-6 {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+
+        .main-content-expanded {
+            margin-left: 64px;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Sidebar -->
+    <div id="sidebar"
+        class="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-all duration-300 sidebar-inactive lg:sidebar-active">
+        <div class="flex items-center justify-between h-16 bg-white border-b border-gray-600 text-blue-600 px-4">
+            <div class="flex items-center">
+                <i class="fas fa-boxes mr-2"></i>
+                <h1 class="text-lg font-semibold">EstoqueMax</h1>
+            </div>
+            <button id="toggleSidebar" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
+        <nav class="mt-6">
+            <div class="px-6 mb-4 menu-title">
+                <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Menu Principal</p>
+            </div>
+            <a href="#" data-section="dashboard"
+                class="nav-link flex items-center px-6 py-3 text-blue-600 bg-blue-50 border-r-2 border-blue-600">
+                <i class="fas fa-tachometer-alt mr-3"></i>
+                <span class="font-medium">Dashboard</span>
+            </a>
+            <a href="#" data-section="products"
+                class="nav-link flex items-center px-6 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
+                <i class="fas fa-box mr-3"></i>
+                <span>Produtos</span>
+            </a>
+            <a href="#" data-section="entries"
+                class="nav-link flex items-center px-6 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
+                <i class="fas fa-arrow-down mr-3"></i>
+                <span>Entradas</span>
+            </a>
+            <a href="#" data-section="exits"
+                class="nav-link flex items-center px-6 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
+                <i class="fas fa-arrow-up mr-3"></i>
+                <span>Saídas</span>
+            </a>
+            <a href="#" data-section="suppliers"
+                class="nav-link flex items-center px-6 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
+                <i class="fas fa-truck mr-3"></i>
+                <span>Fornecedores</span>
+            </a>
+            <a href="#" data-section="reports"
+                class="nav-link flex items-center px-6 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
+                <i class="fas fa-chart-bar mr-3"></i>
+                <span>Relatórios</span>
+            </a>
+            <a href="#" data-section="users"
+                class="nav-link flex items-center px-6 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
+                <i class="fas fa-users mr-3"></i>
+                <span>Usuários</span>
+            </a>
+            <a href="#" data-section="settings"
+                class="nav-link flex items-center px-6 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors">
+                <i class="fas fa-cog mr-3"></i>
+                <span>Configurações</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="lg:ml-64">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b">
+            <div class="flex items-center justify-between px-6 py-4">
+                <div class="flex items-center space-x-4">
+                    <button id="openSidebar" class="lg:hidden text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div>
+                        <h2 id="pageTitle" class="text-2xl font-bold text-gray-800">Dashboard</h2>
+                        <p id="pageSubtitle" class="text-gray-600">Visão geral do seu estoque</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="notificationBtn" class="relative p-2 text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span
+                            class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">3</span>
+                    </button>
+                    <div class="relative">
+                        <div class="flex items-center space-x-3 cursor-pointer" id="userMenuButton">
+                            <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                                <span class="text-white text-sm font-medium">AD</span>
+                            </div>
+                            <div class="hidden md:block">
+                                <p class="text-sm font-medium text-gray-800">Admin User</p>
+                                <p class="text-xs text-gray-500">admin@stockpro.com</p>
+                            </div>
+                            <i class="fas fa-chevron-down text-gray-500 text-xs"></i>
+                        </div>
+                        <div id="userDropdown" class="user-dropdown">
+                            <div class="user-dropdown-item"
+                                onclick="switchUser('Admin User', 'admin@stockpro.com', 'AD')">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
+                                        <span class="text-white text-xs">AD</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium">Admin User</p>
+                                        <p class="text-xs text-gray-500">admin@stockpro.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="user-dropdown-item"
+                                onclick="switchUser('Operador', 'operador@stockpro.com', 'OP')">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center">
+                                        <span class="text-white text-xs">OP</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium">Operador</p>
+                                        <p class="text-xs text-gray-500">operador@stockpro.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="user-dropdown-item"
+                                onclick="switchUser('Gerente', 'gerente@stockpro.com', 'GE')">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center">
+                                        <span class="text-white text-xs">GE</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium">Gerente</p>
+                                        <p class="text-xs text-gray-500">gerente@stockpro.com</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border-t border-gray-200"></div>
+                            <div class="user-dropdown-item text-red-600 hover:bg-red-50" onclick="logout()">
+                                <i class="fas fa-sign-out-alt mr-2"></i>
+                                Sair
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <main id="dashboard" class="section p-6">
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow-sm p-6 card-hover">
+                    <div class="flex items-center justify-between">
+                        <div class="mr-4">
+                            <p class="text-sm font-medium text-gray-600">Total de Produtos</p>
+                            <p class="text-3xl font-bold text-gray-900">1,247</p>
+                            <p class="text-sm text-green-600 mt-1">
+                                <i class="fas fa-arrow-up mr-1"></i>+12% este mês
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-boxes text-blue-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Produtos em Falta</p>
+                            <p class="text-3xl font-bold text-red-600">23</p>
+                            <p class="text-sm text-red-600 mt-1">
+                                <i class="fas fa-exclamation-triangle mr-1"></i>Atenção necessária
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-exclamation-triangle text-red-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Movimentações Hoje</p>
+                            <p class="text-3xl font-bold text-gray-900">156</p>
+                            <p class="text-sm text-blue-600 mt-1">
+                                <i class="fas fa-exchange-alt mr-1"></i>89 entradas, 67 saídas
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-exchange-alt text-green-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 card-hover">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Valor Total</p>
+                            <p class="text-3xl font-bold text-gray-900">R$ 89.432</p>
+                            <p class="text-sm text-green-600 mt-1">
+                                <i class="fas fa-arrow-up mr-1"></i>+5.2% este mês
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-dollar-sign text-yellow-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts and Alerts Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Movement Chart -->
+                <div class="lg:col-span-2 bg-white rounded-xl shadow-sm p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800">Movimentação dos Últimos 7 Dias</h3>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 text-sm bg-blue-100 text-blue-600 rounded-lg">Entradas</button>
+                            <button class="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-lg">Saídas</button>
+                        </div>
+                    </div>
+                    <!-- Chart will be added here -->
+                </div>
+
+                <!-- Alerts Panel -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-6">Alertas Importantes</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3 p-3 bg-red-50 rounded-lg">
+                            <i class="fas fa-exclamation-circle text-red-500 mt-1"></i>
+                            <div>
+                                <p class="text-sm font-medium text-red-800">Estoque Crítico</p>
+                                <p class="text-xs text-red-600">23 produtos abaixo do mínimo</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg">
+                            <i class="fas fa-clock text-yellow-500 mt-1"></i>
+                            <div>
+                                <p class="text-sm font-medium text-yellow-800">Vencimentos</p>
+                                <p class="text-xs text-yellow-600">8 produtos vencem em 7 dias</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg">
+                            <i class="fas fa-info-circle text-blue-500 mt-1"></i>
+                            <div>
+                                <p class="text-sm font-medium text-blue-800">Backup</p>
+                                <p class="text-xs text-blue-600">Último backup: hoje às 03:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-6">Ações Rápidas</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button id="quickAddProduct"
+                        class="flex flex-col items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+                        <i class="fas fa-plus-circle text-blue-600 text-2xl mb-2"></i>
+                        <span class="text-sm font-medium text-blue-800">Novo Produto</span>
+                    </button>
+                    <button id="quickEntry"
+                        class="flex flex-col items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
+                        <i class="fas fa-arrow-down text-green-600 text-2xl mb-2"></i>
+                        <span class="text-sm font-medium text-green-800">Entrada</span>
+                    </button>
+                    <button id="quickExit"
+                        class="flex flex-col items-center p-4 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">
+                        <i class="fas fa-arrow-up text-red-600 text-2xl mb-2"></i>
+                        <span class="text-sm font-medium text-red-800">Saída</span>
+                    </button>
+                    <button id="quickReport"
+                        class="flex flex-col items-center p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
+                        <i class="fas fa-file-alt text-purple-600 text-2xl mb-2"></i>
+                        <span class="text-sm font-medium text-purple-800">Relatório</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Products Section -->
+        <main id="products" class="section p-6 hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800">Gerenciar Produtos</h3>
+                    <p class="text-gray-600">Cadastre e gerencie todos os produtos do seu estoque</p>
+                </div>
+                <button id="addProductBtn"
+                    class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Novo Produto
+                </button>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="bg-white rounded-xl shadow-sm p-3 mb-3">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <input type="text" id="searchProducts" placeholder="Buscar produtos..."
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <select id="categoryFilter"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Todas as categorias</option>
+                            <option value="eletronicos">Eletrônicos</option>
+                            <option value="escritorio">Escritório</option>
+                            <option value="limpeza">Limpeza</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select id="stockFilter"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="">Todos os estoques</option>
+                            <option value="low">Estoque baixo</option>
+                            <option value="normal">Estoque normal</option>
+                            <option value="high">Estoque alto</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button id="clearFilters"
+                            class="w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                            Limpar Filtros
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Table -->
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Produto</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Categoria</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Estoque</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Preço</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Status</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Products will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Other sections (entries, exits, suppliers, reports, users, settings) remain the same -->
+        <!-- ... -->
+    </div>
+
+    <!-- Product Modal -->
+    <div id="productModal"
+        class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-800">Novo Produto</h3>
+                    <button id="closeProductModal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <form id="productForm" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Produto</label>
+                            <input type="text" name="name" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Categoria</label>
+                            <select name="category" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">Selecione uma categoria</option>
+                                <option value="eletronicos">Eletrônicos</option>
+                                <option value="escritorio">Escritório</option>
+                                <option value="limpeza">Limpeza</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Código Interno</label>
+                            <input type="text" name="code"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Unidade</label>
+                            <select name="unit" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="un">Unidade</option>
+                                <option value="kg">Quilograma</option>
+                                <option value="l">Litro</option>
+                                <option value="m">Metro</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Estoque Atual</label>
+                            <input type="number" name="stock" required min="0"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Estoque Mínimo</label>
+                            <input type="number" name="minStock" required min="0"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Preço de Custo</label>
+                            <input type="number" name="costPrice" required min="0" step="0.01"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Preço de Venda</label>
+                            <input type="number" name="salePrice" required min="0" step="0.01"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Localização</label>
+                        <input type="text" name="location" placeholder="Ex: Prateleira A1"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Descrição</label>
+                        <textarea name="description" rows="3"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    </div>
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" id="cancelProduct"
+                            class="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="submit"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Salvar Produto
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar toggle
+        const sidebar = document.getElementById('sidebar');
+        const openSidebarBtn = document.getElementById('openSidebar');
+        const toggleSidebarBtn = document.getElementById('toggleSidebar');
+        const mainContent = document.getElementById('mainContent');
+
+        openSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('sidebar-active');
+            sidebar.classList.toggle('sidebar-inactive');
+        });
+
+        // Toggle sidebar collapse/expand
+        toggleSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('sidebar-collapsed');
+            mainContent.classList.toggle('lg:ml-64');
+            mainContent.classList.toggle('main-content-expanded');
+
+            // Change the icon based on state
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                toggleSidebarBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            } else {
+                toggleSidebarBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            }
+        });
+
+        // User dropdown menu
+        const userMenuButton = document.getElementById('userMenuButton');
+        const userDropdown = document.getElementById('userDropdown');
+
+        userMenuButton.addEventListener('click', () => {
+            userDropdown.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!userMenuButton.contains(e.target) && !userDropdown.contains(e.target)) {
+                userDropdown.classList.remove('show');
+            }
+        });
+
+        // Function to switch user
+        function switchUser(name, email, initials) {
+            const userInfo = userMenuButton.querySelector('.hidden.md\\:block');
+            const userInitials = userMenuButton.querySelector('.w-8.h-8 span');
+
+            userInfo.querySelector('p:first-child').textContent = name;
+            userInfo.querySelector('p:last-child').textContent = email;
+            userInitials.textContent = initials;
+
+            // Change color based on user role
+            const avatar = userMenuButton.querySelector('.w-8.h-8');
+            avatar.className = 'w-8 h-8 rounded-full flex items-center justify-center';
+
+            if (initials === 'AD') {
+                avatar.classList.add('bg-blue-600');
+            } else if (initials === 'OP') {
+                avatar.classList.add('bg-green-600');
+            } else if (initials === 'GE') {
+                avatar.classList.add('bg-purple-600');
+            }
+
+            userDropdown.classList.remove('show');
+        }
+
+        // Function to logout
+        function logout() {
+            alert('Você foi desconectado do sistema.');
+            // Here you would typically redirect to login page
+            // window.location.href = '/login';
+        }
+
+        // Section navigation
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                if (section.id === sectionId) {
+                    section.classList.remove('hidden');
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+
+            // Update page title and subtitle
+            const pageTitle = document.getElementById('pageTitle');
+            const pageSubtitle = document.getElementById('pageSubtitle');
+
+            switch (sectionId) {
+                case 'dashboard':
+                    pageTitle.textContent = 'Dashboard';
+                    pageSubtitle.textContent = 'Visão geral do seu estoque';
+                    break;
+                case 'products':
+                    pageTitle.textContent = 'Produtos';
+                    pageSubtitle.textContent = 'Gerencie seus produtos';
+                    break;
+                // Add cases for other sections
+            }
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const section = this.getAttribute('data-section');
+                showSection(section);
+
+                // Update active link styling
+                document.querySelectorAll('.nav-link').forEach(navLink => {
+                    navLink.classList.remove('text-blue-600', 'bg-blue-50', 'border-r-2', 'border-blue-600');
+                    navLink.classList.add('text-gray-700', 'hover:bg-gray-50', 'hover:text-blue-600');
+                });
+
+                this.classList.add('text-blue-600', 'bg-blue-50', 'border-r-2', 'border-blue-600');
+                this.classList.remove('text-gray-700', 'hover:bg-gray-50', 'hover:text-blue-600');
+            });
+        });
+
+        // Product modal
+        const addProductBtn = document.getElementById('addProductBtn');
+        const productModal = document.getElementById('productModal');
+        const closeProductModal = document.getElementById('closeProductModal');
+        const cancelProduct = document.getElementById('cancelProduct');
+
+        addProductBtn.addEventListener('click', () => {
+            productModal.classList.remove('hidden');
+        });
+
+        closeProductModal.addEventListener('click', () => {
+            productModal.classList.add('hidden');
+        });
+
+        cancelProduct.addEventListener('click', () => {
+            productModal.classList.add('hidden');
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === productModal) {
+                productModal.classList.add('hidden');
+            }
+        });
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !productModal.classList.contains('hidden')) {
+                productModal.classList.add('hidden');
+            }
+        });
+
+        // Initialize dashboard
+        showSection('dashboard');
+    </script>
+</body>
+
+</html>
